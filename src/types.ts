@@ -17,3 +17,7 @@ export type Result = {
 export type Parser = {
     parse: (string: string) => Result[]
 }
+
+export type Extractor = {
+    extract: (fn: Callables) => string;
+}

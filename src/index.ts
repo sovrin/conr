@@ -1,13 +1,14 @@
 import parser, {Type} from './parser';
+import extractor from './extractor';
 import type {Callables, Conr, Result} from './types';
 
-const FN_ARGUMENTS = /^(?:function\s+(?:.*?\()?)?\(?(.*?)\)?(?:\s+=>)?\s+{$.*/gm;
 
 /**
  *
  */
 const factory = (): Conr => {
     const dependencies = new Map();
+    const {extract} = extractor();
     const {parse} = parser();
 
     /**
@@ -66,27 +67,6 @@ const factory = (): Conr => {
     const set = (name: string | number, value: unknown): void => {
         dependencies.set(name, value);
     };
-
-    /**
-     *
-     * @param fn
-     */
-    const extract = (fn: Callables): string => {
-        let string = stringify(fn);
-        [, string] = (new RegExp(FN_ARGUMENTS))
-            .exec(string)
-        ;
-
-        return string;
-    };
-
-    /**
-     *
-     * @param fn
-     */
-    const stringify = (fn: Callables): string => (
-        Function.prototype.toString.call(fn)
-    );
 
     return {
         resolve,

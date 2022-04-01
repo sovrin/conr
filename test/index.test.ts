@@ -2,6 +2,21 @@ import assert from 'assert';
 import container from '../src';
 
 describe('conr', () => {
+
+    const instance = container();
+    instance.set('foo', 'Hello');
+    instance.set('bar', 'World');
+    instance.set('name', (name) => `My name is ${name}.`);
+
+    instance.resolve((foo, bar) => {
+        console.log(foo, bar); // Hello World
+    });
+
+    instance.resolve(async ({foo, name}) => {
+        console.log(foo, name('John Doe')); // Hello My name is John Doe.
+    })
+
+
     describe('get/set', () => {
         const instance = container();
         const foo = () => {};
