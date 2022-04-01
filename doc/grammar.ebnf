@@ -1,0 +1,8 @@
+<expr>       ::= <dependency> ( "," <dependency>)+
+<dependency> ::= <property> | <object>
+<object>     ::= "{" <properties> "}"
+<properties> ::= <property> ( "," <property> )*
+<property>   ::= <letter> ( <letter> | <character> )*
+<character>  ::= <letter> | <digit>
+<letter>     ::= [a-z]
+<digit>      ::= [0-9]
