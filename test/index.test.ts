@@ -3,19 +3,22 @@ import container from '../src';
 
 describe('conr', () => {
 
-    const instance = container();
-    instance.set('foo', 'Hello');
-    instance.set('bar', 'World');
-    instance.set('name', (name) => `My name is ${name}.`);
+    describe('example', () => {
+        const instance = container();
+        instance.set('foo', 'Hello');
+        instance.set('bar', 'World');
+        instance.set('name', (name) => `My name is ${name}.`);
 
-    instance.resolve((foo, bar) => {
-        console.log(foo, bar); // Hello World
-    });
+        instance.resolve((foo, bar) => {
+            assert(foo === 'Hello');
+            assert(bar === 'World');
+        });
 
-    instance.resolve(async ({foo, name}) => {
-        console.log(foo, name('John Doe')); // Hello My name is John Doe.
+        instance.resolve(async ({foo, name}) => {
+            assert(foo === 'Hello');
+            assert(name('John Doe') === 'My name is John Doe.');
+        });
     })
-
 
     describe('get/set', () => {
         const instance = container();
@@ -231,6 +234,41 @@ describe('conr', () => {
                         assert(bar === barFn);
                     });
                 });
+            });
+        });
+
+        describe('with complex signature', () => {
+            it('should return foo, bar fn', () => {
+                const tester = (fn) => fn();
+
+                instance.resolve((foo, bar) => tester(function () {
+                    assert(foo === fooFn);
+                    assert(bar === barFn);
+                }));
+            });
+        });
+
+        describe('with weird new lines', () => {
+            it('should return foo, bar fn', () => {
+
+                instance.resolve((
+                    foo
+                        ,
+                            bar
+                ) => function () {
+                    assert(foo === fooFn);
+                    assert(bar === barFn);
+                });
+
+                const tester = (fn) => fn();
+
+                instance.resolve((
+                    foo     ,
+                        bar     ,
+                ) => tester(function () {
+                    assert(foo === fooFn);
+                    assert(bar === barFn);
+                }));
             });
         });
     });
