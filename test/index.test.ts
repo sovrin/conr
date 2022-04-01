@@ -105,7 +105,31 @@ describe('conr', () => {
 
         describe('with empty named inline function', () => {
             it('should return foo fn', () => {
-                instance.resolve(function (foo) {
+                instance.resolve(function bar(foo) {
+                    assert(foo === fooFn);
+                });
+            });
+        });
+
+        describe('with async named inline function and one argument', () => {
+            it('should return foo fn', () => {
+                instance.resolve(async function bar(foo) {
+                    assert(foo === fooFn);
+                });
+            });
+        });
+
+        describe('with async unnamed inline function and one argument', () => {
+            it('should return foo fn', () => {
+                instance.resolve(async function (foo) {
+                    assert(foo === fooFn);
+                });
+            });
+        });
+
+        describe('with async arrow function and one argument', () => {
+            it('should return foo fn', () => {
+                instance.resolve(async (foo) => {
                     assert(foo === fooFn);
                 });
             });
