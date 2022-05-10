@@ -41,7 +41,7 @@ const factory = (): Parser => {
 
     const letter = regex(/[a-z]/ig, 'letter');
     const digit = map(
-        regex(/[0-9]/g, 'digit'),
+        regex(/\d/g, 'digit'),
         int(),
     );
     const character = any([
