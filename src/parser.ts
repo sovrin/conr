@@ -1,5 +1,18 @@
-import onia, {regex, alpha, map, any, many, sequence, optional} from 'onia';
-import {pop, flatten, join, int, filter, pipe} from './utils';
+import onia, {
+    regex,
+    alpha,
+    map,
+    any,
+    many,
+    sequence,
+    optional,
+    pop,
+    flatten,
+    join,
+    int,
+    filter,
+    pipe,
+} from 'onia';
 import {Parser, Result} from './types';
 
 export enum Type {
