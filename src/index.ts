@@ -21,24 +21,32 @@ const factory = (): Conr => {
             return callables.apply(null);
         }
 
+        /**
+         *
+         * @param acc
+         * @param result
+         * @param type
+         */
+        const reduce = (acc, {result, type}) => {
+            let val;
+
+            if (type === Type.VARIABLE) {
+                val = get(result);
+            } else {
+                val = (result as Result[]).reduce(reduce, {});
+            }
+
+            if (Array.isArray(acc)) {
+                acc.push(val);
+            } else {
+                acc[result] = val;
+            }
+
+            return acc;
+        };
+
         const deps = parse(match)
-            .reduce((acc, {result, type}) => {
-                if (type === Type.VARIABLE) {
-                    acc.push(
-                        get(result as string),
-                    );
-                } else {
-                    acc.push(
-                        (result as Result[]).reduce((acc, {result}) => (
-                            acc[result as string] = get(result as string), acc
-                        ), {}),
-                    );
-
-                    return acc;
-                }
-
-                return acc;
-            }, [])
+            .reduce(reduce, [])
         ;
 
         return callables.apply(null, deps);
