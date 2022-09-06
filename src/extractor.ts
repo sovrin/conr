@@ -1,6 +1,6 @@
 import type {Callables, Extractor} from './types';
 
-const FN_SIGNATURE = /^(?:function\s+(?:.*?\()?)?\(?(.*?)\)?(?:\s+=>.*)?\s+{$.*/gm;
+const FN_SIGNATURE = /^(?:function\s+(?:.*?\()?)?\(?(.*?)\)?(?:\s+=>.*)?\s+\(*{$.*/gm;
 
 const factory = (): Extractor => {
     /**
