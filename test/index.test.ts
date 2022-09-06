@@ -271,5 +271,38 @@ describe('conr', () => {
                 }));
             });
         });
+
+        describe('with implicit return', () => {
+            it('should return foo, bar fn', () => {
+                const {foo, bar, none} = instance.resolve((({foo, bar, none}) => ({
+                    foo,
+                }))) as any;
+
+                assert(foo === fooFn);
+                assert(bar == undefined);
+                assert(none == undefined);
+            });
+
+            it('should ignore weird indentation and parenthesis', () => {
+                const {foo, bar, none} = instance.resolve((({
+                                                                foo,
+                                                                none
+                                                            },
+                                                            bar
+                ) => (((
+                    ((
+                        ({
+                            foo,
+                                bar,
+                            })
+                        ))
+                    ))
+                ))) as any;
+
+                assert(foo === fooFn);
+                assert(bar == barFn);
+                assert(none == undefined);
+            });
+        });
     });
 });
