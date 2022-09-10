@@ -1,17 +1,21 @@
 import type {Callables, Extractor} from './types';
 
-const FN_SIGNATURE = /^(?:function\s+(?:.*?\()?)?\(?(.*?)\)?(?:\s+=>.*)?\s+\(*{$.*/gm;
+const ARROW_FN = /^\(?(.*?)\)?\s=>/s;
+const EXPLICIT_FN = /^function\s.*\((.*)\).*{/m
 
 const factory = (): Extractor => {
     /**
      *
      * @param fn
      */
-    const extract = (fn: Callables): string => {
+    const extract = (fn: Callables): any => {
         const signature = stringify(fn);
-        const [, args] = (new RegExp(FN_SIGNATURE))
-            .exec(signature)
+        const regex = (signature.indexOf('function') === 0)
+            ? EXPLICIT_FN
+            : ARROW_FN
         ;
+
+        const [, args] = regex.exec(signature);
 
         return args;
     };
@@ -23,6 +27,8 @@ const factory = (): Extractor => {
      */
     const stringify = (fn: Callables): string => (
         Function.prototype.toString.call(fn)
+            .split('\n')
+            .shift()
     );
 
     return {
