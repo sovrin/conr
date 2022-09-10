@@ -303,6 +303,18 @@ describe('conr', () => {
                 assert(bar == barFn);
                 assert(none == undefined);
             });
+
+            it('should not be influenced by return value', () => {
+                const string = instance.resolve((({foo, none}, bar,) => 'foo'));
+                const fn = instance.resolve((({foo, none}, bar,) => foo));
+                const array = instance.resolve<any[]>((({foo, none}, bar,) => [foo, bar]));
+
+                assert(string === 'foo');
+                assert(fn === fooFn);
+                assert(array.length === 2);
+                assert(array[0] === fooFn);
+                assert(array[1] === barFn);
+            });
         });
     });
 });
