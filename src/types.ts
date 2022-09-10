@@ -1,7 +1,7 @@
 import {Type} from './parser';
 
 export type Conr = {
-    resolve(callables: Callables): unknown,
+    resolve<T>(callables: Callables): T,
     get<T>(name: string | number): T,
     set(name: string | number, value: unknown): void,
     reset(): void,

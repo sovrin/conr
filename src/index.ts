@@ -15,7 +15,7 @@ const factory = (): Conr => {
      *
      * @param callables
      */
-    const resolve = (callables: Callables): unknown => {
+    const resolve = <T>(callables: Callables): T => {
         const match = extract(callables);
         if (match === '' || !match) {
             return callables.apply(null);
