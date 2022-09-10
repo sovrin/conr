@@ -16,6 +16,7 @@ describe('conr', () => {
                 test(parse('foo , {bar ,biz}'), [Type.VARIABLE, Type.OBJECT], [['foo'], ['bar', 'biz']]);
                 test(parse('{foo,bar},biz'), [Type.OBJECT, Type.VARIABLE], [['foo', 'bar'], ['biz']]);
                 test(parse('{foo},bar,{biz}'), [Type.OBJECT, Type.VARIABLE, Type.OBJECT], [['foo'], ['bar'], ['biz']]);
+                test(parse('{foo,},bar,{biz,}'), [Type.OBJECT, Type.VARIABLE, Type.OBJECT], [['foo'], ['bar'], ['biz']]);
             });
         });
     });
