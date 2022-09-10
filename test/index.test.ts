@@ -315,6 +315,12 @@ describe('conr', () => {
                 assert(array[0] === fooFn);
                 assert(array[1] === barFn);
             });
+
+            it('should not be influenced by dangling comas', () => {
+                const string = instance.resolve((({foo,}, bar,) => 'foo'));
+
+                assert(string === 'foo');
+            });
         });
     });
 });
