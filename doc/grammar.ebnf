@@ -1,6 +1,6 @@
 <expr>       ::= <dependency> ( "," <dependency>)+
 <dependency> ::= <property> | <object>
-<object>     ::= "{" <properties> "}"
+<object>     ::= "{" <properties> ","? "}"
 <properties> ::= <property> ( "," <property> )*
 <property>   ::= <letter> ( <letter> | <character> )*
 <character>  ::= <letter> | <digit>

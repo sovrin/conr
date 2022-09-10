@@ -93,6 +93,7 @@ const factory = (): Parser => {
         sequence([
             alpha(Char.BRACE_OPEN),
             properties,
+            optional(alpha(Char.DELIMITER)),
             alpha(Char.BRACE_CLOSE),
         ]),
         pipe(
