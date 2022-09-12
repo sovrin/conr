@@ -1,6 +1,6 @@
 {
   "name": "conr",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "small and loose dependency injection library",
   "main": "./dist/index.js",
   "exports": "./dist/index.js",
