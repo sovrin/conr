@@ -247,6 +247,36 @@ describe('conr', () => {
                     assert(foo === fooFn);
                     assert(bar === barFn);
                 }));
+
+                instance.resolve(async (foo, bar) => tester(function () {
+                    assert(foo === fooFn);
+                    assert(bar === barFn);
+                }));
+            });
+
+            it('should return foo via proxy fn', () => {
+                const proxy = ({foo}) => foo;
+
+                const foo = instance.resolve(proxy);
+                assert(foo === fooFn);
+            });
+
+            it('should return foo via async proxy fn', () => {
+                const proxy = async ({foo}) => foo;
+
+                instance.resolve<Promise<any>>(proxy).then((foo) => {
+                    assert(foo === fooFn);
+                });
+            });
+
+            it('should return foo via nested async proxy fn', () => {
+                const resolve = (fn) => {
+                    instance.resolve<any>(fn).then(({foo}) => {
+                        assert(foo === fooFn);
+                    });
+                }
+
+                resolve(async ({foo}) => foo);
             });
         });
 
