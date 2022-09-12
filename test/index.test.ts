@@ -9,15 +9,17 @@ describe('conr', () => {
         instance.set('bar', 'World');
         instance.set('name', (name) => `My name is ${name}.`);
 
-        instance.resolve((foo, bar) => {
-            assert(foo === 'Hello');
-            assert(bar === 'World');
-        });
+        it('should return values', () => {
+            instance.resolve((foo, bar) => {
+                assert(foo === 'Hello');
+                assert(bar === 'World');
+            });
 
-        instance.resolve(async ({foo, name}) => {
-            assert(foo === 'Hello');
-            assert(name('John Doe') === 'My name is John Doe.');
-        });
+            instance.resolve(async ({foo, name}) => {
+                assert(foo === 'Hello');
+                assert(name('John Doe') === 'My name is John Doe.');
+            });
+        })
     })
 
     describe('get/set', () => {
