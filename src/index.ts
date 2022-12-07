@@ -55,8 +55,10 @@ const factory = (): Conr => {
     /**
      *
      */
-    const reset = (): void => {
+    const reset = (): Conr => {
         dependencies.clear();
+
+        return context();
     };
 
     /**
@@ -72,16 +74,23 @@ const factory = (): Conr => {
      * @param name
      * @param value
      */
-    const set = (name: string | number, value: unknown): void => {
+    const set = (name: string | number, value: unknown): Conr => {
         dependencies.set(name, value);
+
+        return context();
     };
 
-    return {
+    /**
+     *
+     */
+    const context = (): Conr => ({
         resolve,
         reset,
         get,
         set,
-    };
+    })
+
+    return context();
 };
 
 /**

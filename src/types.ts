@@ -3,8 +3,8 @@ import {Type} from './parser';
 export type Conr = {
     resolve<T>(callables: Callables): T,
     get<T>(name: string | number): T,
-    set(name: string | number, value: unknown): void,
-    reset(): void,
+    set(name: string | number, value: unknown): Conr,
+    reset(): Conr,
 }
 
 export type Callables = (...deps) => unknown;
