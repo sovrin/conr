@@ -2,7 +2,6 @@ import parser, {Type} from './parser';
 import extractor from './extractor';
 import type {Callables, Conr, Result} from './types';
 
-
 /**
  *
  */
@@ -28,18 +27,15 @@ const factory = (): Conr => {
          * @param type
          */
         const reduce = (acc, {result, type}) => {
-            let val;
-
-            if (type === Type.VARIABLE) {
-                val = get(result);
-            } else {
-                val = (result as Result[]).reduce(reduce, {});
-            }
+            const value = (type === Type.VARIABLE)
+                ? get(result)
+                : (result as Result[]).reduce(reduce, {})
+            ;
 
             if (Array.isArray(acc)) {
-                acc.push(val);
+                acc.push(value);
             } else {
-                acc[result] = val;
+                acc[result] = value;
             }
 
             return acc;
