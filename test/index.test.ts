@@ -2,7 +2,6 @@ import assert from 'assert';
 import container from '../src';
 
 describe('conr', () => {
-
     describe('example', () => {
         const instance = container();
         instance.set('foo', 'Hello');
@@ -11,13 +10,13 @@ describe('conr', () => {
 
         it('should return values', () => {
             instance.resolve((foo, bar) => {
-                assert(foo === 'Hello');
-                assert(bar === 'World');
+                assert.equal(foo, 'Hello');
+                assert.equal(bar, 'World');
             });
 
             instance.resolve(async ({foo, name}) => {
-                assert(foo === 'Hello');
-                assert(name('John Doe') === 'My name is John Doe.');
+                assert.equal(foo, 'Hello');
+                assert.equal(name('John Doe'), 'My name is John Doe.');
             });
         })
     })
@@ -35,6 +34,17 @@ describe('conr', () => {
 
             assert(instance.get('foo') == foo);
         });
+
+        it('should return context for function chaining', () => {
+            instance.set('first', 'foo')
+                .set('second', 'bar')
+                .set('name', 'John Doe')
+            ;
+
+            assert(instance.get('first') == 'foo');
+            assert(instance.get('second') == 'bar');
+            assert(instance.get('name') == 'John Doe');
+        });
     });
 
     describe('reset', () => {
@@ -43,7 +53,7 @@ describe('conr', () => {
             const foo = () => {};
 
             instance.set('foo', foo);
-            assert(instance.get('foo') === foo);
+            assert.equal(instance.get('foo'), foo);
 
             instance.reset();
             assert(instance.get('foo') == null);
@@ -64,11 +74,11 @@ describe('conr', () => {
             it('should return nothing', () => {
                 const emptyFn = () => {
                     // meh
-                    assert(Object.keys(this).length === 0);
+                    assert.equal(Object.keys(this).length, 0);
                 };
 
                 instance.resolve(emptyFn);
-                assert(emptyFn.length === 0);
+                assert.equal(emptyFn.length, 0);
             });
         });
 
@@ -76,18 +86,18 @@ describe('conr', () => {
             it('should return nothing', () => {
                 function emptyFn() {
                     // meh
-                    assert(arguments.length === 0);
+                    assert.equal(arguments.length, 0);
                 }
 
                 instance.resolve(emptyFn);
-                assert(emptyFn.length === 0);
+                assert.equal(emptyFn.length, 0);
             });
         });
 
         describe('with empty named inline function', () => {
             it('should return nothing', () => {
                 instance.resolve(function bar() {
-                    assert(arguments.length === 0);
+                    assert.equal(arguments.length, 0);
                 });
             });
         });
@@ -95,7 +105,7 @@ describe('conr', () => {
         describe('with named inline function', () => {
             it('should return foo fn', () => {
                 instance.resolve(function bar(foo) {
-                    assert(foo === fooFn);
+                    assert.equal(foo, fooFn);
                 });
             });
         });
@@ -103,7 +113,7 @@ describe('conr', () => {
         describe('with empty unnamed inline function', () => {
             it('should return nothing', () => {
                 instance.resolve(function () {
-                    assert(arguments.length === 0);
+                    assert.equal(arguments.length, 0);
                 });
             });
         });
@@ -111,7 +121,7 @@ describe('conr', () => {
         describe('with empty named inline function', () => {
             it('should return foo fn', () => {
                 instance.resolve(function bar(foo) {
-                    assert(foo === fooFn);
+                    assert.equal(foo, fooFn);
                 });
             });
         });
@@ -119,7 +129,7 @@ describe('conr', () => {
         describe('with async named inline function and one argument', () => {
             it('should return foo fn', () => {
                 instance.resolve(async function bar(foo) {
-                    assert(foo === fooFn);
+                    assert.equal(foo, fooFn);
                 });
             });
         });
@@ -127,7 +137,7 @@ describe('conr', () => {
         describe('with async unnamed inline function and one argument', () => {
             it('should return foo fn', () => {
                 instance.resolve(async function (foo) {
-                    assert(foo === fooFn);
+                    assert.equal(foo, fooFn);
                 });
             });
         });
@@ -135,7 +145,7 @@ describe('conr', () => {
         describe('with async arrow function and one argument', () => {
             it('should return foo fn', () => {
                 instance.resolve(async (foo) => {
-                    assert(foo === fooFn);
+                    assert.equal(foo, fooFn);
                 });
             });
         });
@@ -152,7 +162,7 @@ describe('conr', () => {
             describe('with numbers in argument', () => {
                 it('should return foo fn', () => {
                     instance.resolve((f00) => {
-                        assert(f00 === fooFn);
+                        assert.equal(f00, fooFn);
                     });
                 });
             });
@@ -160,7 +170,7 @@ describe('conr', () => {
             describe('without parenthesis', () => {
                 it('should return foo fn', () => {
                     instance.resolve(foo => {
-                        assert(foo === fooFn);
+                        assert.equal(foo, fooFn);
                     });
                 });
             });
@@ -168,7 +178,7 @@ describe('conr', () => {
             describe('with parenthesis', () => {
                 it('should return foo fn', () => {
                     instance.resolve((foo) => {
-                        assert(foo === fooFn);
+                        assert.equal(foo, fooFn);
                     });
                 });
 
@@ -182,7 +192,7 @@ describe('conr', () => {
             describe('with object deconstruction and one property', () => {
                 it('should return foo fn', () => {
                     instance.resolve(({foo}) => {
-                        assert(foo === fooFn);
+                        assert.equal(foo, fooFn);
                     });
                 });
 
@@ -196,9 +206,9 @@ describe('conr', () => {
             describe('with object deconstruction and multiple properties', () => {
                 it('should return foo, bar, biz fn', () => {
                     instance.resolve(({foo, bar, biz}) => {
-                        assert(foo === fooFn);
-                        assert(bar === barFn);
-                        assert(biz === bizFn);
+                        assert.equal(foo, fooFn);
+                        assert.equal(bar, barFn);
+                        assert.equal(biz, bizFn);
                     });
                 });
 
@@ -214,26 +224,26 @@ describe('conr', () => {
             describe('with object deconstruction and multiple properties', () => {
                 it('should return foo, bar, biz fn', () => {
                     instance.resolve((foo, {bar, biz}) => {
-                        assert(foo === fooFn);
-                        assert(bar === barFn);
-                        assert(biz === bizFn);
+                        assert.equal(foo, fooFn);
+                        assert.equal(bar, barFn);
+                        assert.equal(biz, bizFn);
                     });
                 });
 
                 it('should return foo, undefined, bar, biz fn', () => {
                     instance.resolve((foo, none, {bar, biz}) => {
-                        assert(foo === fooFn);
+                        assert.equal(foo, fooFn);
                         assert(none == null);
-                        assert(bar === barFn);
-                        assert(biz === bizFn);
+                        assert.equal(bar, barFn);
+                        assert.equal(biz, bizFn);
                     });
                 });
 
                 it('should return foo, undefined, bar fn', () => {
                     instance.resolve(({foo}, none, bar) => {
-                        assert(foo === fooFn);
+                        assert.equal(foo, fooFn);
                         assert(none == null);
-                        assert(bar === barFn);
+                        assert.equal(bar, barFn);
                     });
                 });
             });
@@ -244,13 +254,13 @@ describe('conr', () => {
                 const tester = (fn) => fn();
 
                 instance.resolve((foo, bar) => tester(function () {
-                    assert(foo === fooFn);
-                    assert(bar === barFn);
+                    assert.equal(foo, fooFn);
+                    assert.equal(bar, barFn);
                 }));
 
                 instance.resolve(async (foo, bar) => tester(function () {
-                    assert(foo === fooFn);
-                    assert(bar === barFn);
+                    assert.equal(foo, fooFn);
+                    assert.equal(bar, barFn);
                 }));
             });
 
@@ -258,21 +268,21 @@ describe('conr', () => {
                 const proxy = ({foo}) => foo;
 
                 const foo = instance.resolve(proxy);
-                assert(foo === fooFn);
+                assert.equal(foo, fooFn);
             });
 
             it('should return foo via async proxy fn', () => {
                 const proxy = async ({foo}) => foo;
 
                 instance.resolve<Promise<any>>(proxy).then((foo) => {
-                    assert(foo === fooFn);
+                    assert.equal(foo, fooFn);
                 });
             });
 
             it('should return foo via nested async proxy fn', () => {
                 const resolve = (fn) => {
                     instance.resolve<any>(fn).then(({foo}) => {
-                        assert(foo === fooFn);
+                        assert.equal(foo, fooFn);
                     });
                 }
 
@@ -288,8 +298,8 @@ describe('conr', () => {
                         ,
                             bar
                 ) => function () {
-                    assert(foo === fooFn);
-                    assert(bar === barFn);
+                    assert.equal(foo, fooFn);
+                    assert.equal(bar, barFn);
                 });
 
                 const tester = (fn) => fn();
@@ -298,8 +308,8 @@ describe('conr', () => {
                     foo     ,
                         bar     ,
                 ) => tester(function () {
-                    assert(foo === fooFn);
-                    assert(bar === barFn);
+                    assert.equal(foo, fooFn);
+                    assert.equal(bar, barFn);
                 }));
             });
         });
@@ -310,7 +320,7 @@ describe('conr', () => {
                     foo,
                 }))) as any;
 
-                assert(foo === fooFn);
+                assert.equal(foo, fooFn);
                 assert(bar == undefined);
                 assert(none == undefined);
             });
@@ -331,7 +341,7 @@ describe('conr', () => {
                     ))
                 ))) as any;
 
-                assert(foo === fooFn);
+                assert.equal(foo, fooFn);
                 assert(bar == barFn);
                 assert(none == undefined);
             });
@@ -341,17 +351,17 @@ describe('conr', () => {
                 const fn = instance.resolve((({foo, none}, bar,) => foo));
                 const array = instance.resolve<any[]>((({foo, none}, bar,) => [foo, bar]));
 
-                assert(string === 'foo');
-                assert(fn === fooFn);
-                assert(array.length === 2);
-                assert(array[0] === fooFn);
-                assert(array[1] === barFn);
+                assert.equal(string, 'foo');
+                assert.equal(fn, fooFn);
+                assert.equal(array.length, 2);
+                assert.equal(array[0], fooFn);
+                assert.equal(array[1], barFn);
             });
 
             it('should not be influenced by dangling comas', () => {
                 const string = instance.resolve((({foo,}, bar,) => 'foo'));
 
-                assert(string === 'foo');
+                assert.equal(string, 'foo');
             });
         });
     });

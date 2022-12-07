@@ -10,7 +10,7 @@ import assert from 'assert';
  */
 export const test = (result: Result[], types: Type[], values: any[][]) => {
     result.forEach((entry, i) => {
-        assert(entry.type === types[i]);
+        assert.equal(entry.type, types[i]);
 
         if (!values[i]) {
             return;
@@ -19,9 +19,9 @@ export const test = (result: Result[], types: Type[], values: any[][]) => {
         values[i].forEach((value, j) => {
             if (entry.type === Type.OBJECT) {
                 //@ts-ignore
-                assert(entry.result[j].result === value);
+                assert.equal(entry.result[j].result, value);
             } else {
-                assert(entry.result === value);
+                assert.equal(entry.result, value);
             }
         });
     });
