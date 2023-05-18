@@ -94,6 +94,20 @@ describe('conr', () => {
             });
         });
 
+        describe('with additional parameters', () => {
+            it('should provide args from this', () => {
+                const args = {test: 'foo'};
+
+                instance.resolve(function bar(foo, bar) {
+                    const [first] = this;
+                    assert.equal(first, args);
+
+                    assert.equal(foo, fooFn);
+                    assert.equal(bar, barFn);
+                }, args);
+            });
+        });
+
         describe('with empty named inline function', () => {
             it('should return nothing', () => {
                 instance.resolve(function bar() {
