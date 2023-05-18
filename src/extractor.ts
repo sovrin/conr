@@ -12,7 +12,7 @@ const factory = (): Extractor => {
      *
      * @param fn
      */
-    const extract = (fn: Callables): any => {
+    const extract = (fn: Callables): string => {
         const signature = stringify(fn);
         const regex = (FN_TEST.test(signature))
             ? EXPLICIT_FN
