@@ -100,15 +100,27 @@ describe('conr', () => {
         });
 
         describe('with additional parameters', () => {
-            it('should provide args from this', () => {
-                const args = {test: 'foo'};
+            describe('with resolvable functions', () => {
+                it('should provide args from this', () => {
+                    const args = {test: 'foo'};
 
-                instance.resolve(function bar(foo, bar) {
-                    assert.equal(this, args);
+                    instance.resolve(function bar(foo, bar) {
+                        assert.equal(this, args);
 
-                    assert.equal(foo, fooFn);
-                    assert.equal(bar, barFn);
-                }, args);
+                        assert.equal(foo, fooFn);
+                        assert.equal(bar, barFn);
+                    }, args);
+                });
+            });
+
+            describe('with unresolvable functions', () => {
+                it('should provide args from this', () => {
+                    const args = {test: 'foo'};
+
+                    instance.resolve(function bar() {
+                        assert.equal(this, args);
+                    }, args);
+                });
             });
         });
 
