@@ -28,9 +28,10 @@ instance.resolve((foo, bar) => {
     console.log(foo, bar); // Hello, World
 });
 
-instance.resolve(async ({foo, name}) => {
+instance.resolve(async function ({foo, name}) {
     console.log(foo, name('John Doe')); // Hello, My name is John Doe.
-})
+    console.log(this) // [{fizz: "buzz"}]
+}, {fizz: "buzz"})
 ```
 
 ## Licence
