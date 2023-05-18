@@ -9,15 +9,22 @@ describe('conr', () => {
         instance.set('name', (name) => `My name is ${name}.`);
 
         it('should return values', () => {
+            const args = {
+                "fizz": "buzz"
+            }
+
             instance.resolve((foo, bar) => {
                 assert.equal(foo, 'Hello');
                 assert.equal(bar, 'World');
             });
 
-            instance.resolve(async ({foo, name}) => {
+            instance.resolve(async function ({foo, name}) {
                 assert.equal(foo, 'Hello');
                 assert.equal(name('John Doe'), 'My name is John Doe.');
-            });
+
+                const [arg] = this;
+                assert.equal(arg, args);
+            }, args);
         })
     })
 
