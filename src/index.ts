@@ -13,8 +13,9 @@ const factory = (): Conr => {
     /**
      *
      * @param callables
+     * @param args
      */
-    const resolve = <T>(callables: Callables): T => {
+    const resolve = <T>(callables: Callables, ...args: unknown[]): T => {
         const match = extract(callables);
         if (match === '' || !match) {
             return callables.apply(null);
@@ -45,7 +46,7 @@ const factory = (): Conr => {
             .reduce(reduce, [])
         ;
 
-        return callables.apply(null, deps);
+        return callables.apply(args, deps);
     };
 
     /**
