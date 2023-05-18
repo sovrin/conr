@@ -30,7 +30,7 @@ instance.resolve((foo, bar) => {
 
 instance.resolve(async function ({foo, name}) {
     console.log(foo, name('John Doe')); // Hello, My name is John Doe.
-    console.log(this) // [{fizz: "buzz"}]
+    console.log(this) // {fizz: "buzz"}
 }, {fizz: "buzz"})
 ```
 

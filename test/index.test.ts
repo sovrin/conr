@@ -21,9 +21,7 @@ describe('conr', () => {
             instance.resolve(async function ({foo, name}) {
                 assert.equal(foo, 'Hello');
                 assert.equal(name('John Doe'), 'My name is John Doe.');
-
-                const [arg] = this;
-                assert.equal(arg, args);
+                assert.equal(this, args);
             }, args);
         })
     })
@@ -106,8 +104,7 @@ describe('conr', () => {
                 const args = {test: 'foo'};
 
                 instance.resolve(function bar(foo, bar) {
-                    const [first] = this;
-                    assert.equal(first, args);
+                    assert.equal(this, args);
 
                     assert.equal(foo, fooFn);
                     assert.equal(bar, barFn);
