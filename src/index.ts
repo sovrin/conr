@@ -1,7 +1,7 @@
 import extractor, {Result, Type} from './extractor';
 import type {Switch} from './types';
 
-type Callables<T, R> = (args: ({ [K in keyof T]?: T[K] })) => R;
+type Callables<T, R> = (...args: Array<{ [K in keyof T]?: T[K] }>) => R;
 type Resolvable<T, R = unknown> = Callables<T, R>;
 type Key<T> = Switch<T, keyof T, string | number>
 type Value<T, K extends Key<T>> = K extends keyof T ? T[K] : any;

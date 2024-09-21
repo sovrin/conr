@@ -7,14 +7,23 @@ describe('conr', () => {
         // Do nothing, the TypeScript compiler handles this for us
     };
 
-
     describe('example', () => {
-        const instance = container();
-        instance.set('foo', 'Hello');
-        instance.set('bar', 'World');
+        type Container = {
+            foo: string;
+            bar: string;
+            name: (name: string) => string;
+        }
+
+        const instance = container<Container>();
+        instance.init({
+            foo: 'Hello',
+            bar: 'World',
+            name: () => ``
+        });
+
         instance.set('name', (name) => `My name is ${name}.`);
 
-        it('should return values', () => {
+        it('should return values', (done) => {
             const args = {
                 "fizz": "buzz"
             }
@@ -28,6 +37,8 @@ describe('conr', () => {
                 assert.equal(foo, 'Hello');
                 assert.equal(name('John Doe'), 'My name is John Doe.');
                 assert.equal(this, args);
+
+                done();
             }, args);
         })
     })
