@@ -16,12 +16,22 @@ $ npm i conr
 ```
 
 ## Usage
-```js
+```typescript
 import conr from 'conr';
 
-const instance = conr();
-instance.set('foo', 'Hello');
-instance.set('bar', 'World');
+type Container = {
+    foo: string;
+    bar: string;
+    name: (name: string) => string;
+}
+
+const instance = conr<Container>();
+instance.init({
+    foo: 'Hello',
+    bar: 'World',
+    name: () => ``
+});
+
 instance.set('name', (name) => `My name is ${name}.`);
 
 instance.resolve((foo, bar) => {
