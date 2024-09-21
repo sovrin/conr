@@ -1,37 +1,74 @@
-import type {Callables, Extractor} from './types';
+import {
+    type Node,
+    type ParameterDeclaration,
+    type BindingElement,
+    createSourceFile,
+    forEachChild,
+    isBindingElement,
+    isFunctionLike,
+    isIdentifier,
+    isObjectBindingPattern,
+    ScriptTarget,
+} from "typescript";
 
-const ARROW_FN = /^(?:\w+\s)?\(?(.*?)\)?\s=>/;
-const EXPLICIT_FN = /^.*\((.*)\).*{/;
-const FN_TEST = /^(async\s)?function\s/;
+export enum Type {
+    OBJECT = 'object',
+    VARIABLE = 'variable',
+}
 
-/**
- *
- */
-const factory = (): Extractor => {
-    /**
-     *
-     * @param fn
-     */
-    const extract = (fn: Callables): string => {
-        const signature = stringify(fn);
-        const regex = (FN_TEST.test(signature))
-            ? EXPLICIT_FN
-            : ARROW_FN
-        ;
+type VariableResult = {
+    type: Type.VARIABLE;
+    result: string;
+};
 
-        const [, args] = regex.exec(signature);
+type ObjectResult = {
+    type: Type.OBJECT;
+    result: Result[];
+};
 
-        return args;
+export type Result = VariableResult | ObjectResult;
+
+const factory = () => {
+    const extractElement = (element: BindingElement | ParameterDeclaration): Result => {
+        if (isIdentifier(element.name)) {
+            const result = isBindingElement(element) && element.propertyName
+                ? element.propertyName.getText()
+                : element.name.text;
+
+            return {
+                type: Type.VARIABLE,
+                result,
+            };
+        }
+
+        if (isObjectBindingPattern(element.name)) {
+            const result = element.name.elements.map(extractElement).filter(Boolean);
+
+            return {
+                type: Type.OBJECT,
+                result,
+            };
+        }
     };
 
-    /**
-     *
-     * @param fn
-     *
-     */
-    const stringify = (fn: Callables): string => (
-        Function.prototype.toString.call(fn)
-    );
+    const extract = <T>(fn: T): Result[] => {
+        const source = stringify(fn);
+        const sourceFile = createSourceFile('extractor.ts', source, ScriptTarget.ES5, true);
+
+        const visit = (node: Node): Result[] => {
+            if (isFunctionLike(node)) {
+                return node.parameters.flatMap(extractElement);
+            }
+
+            return forEachChild<Result[]>(node, visit);
+        };
+
+        return visit(sourceFile);
+    };
+
+    const stringify = <T>(fn: T): string => {
+        return Function.prototype.toString.call(fn);
+    };
 
     return {
         extract,
