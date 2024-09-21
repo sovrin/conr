@@ -9,8 +9,10 @@
   "scripts": {
     "build": "tsc --project tsconfig.prod.json",
     "watch": "tsc --watch",
-    "test": "mocha -r ts-node/register/transpile-only --full-trace 'test/**/*.ts'",
-    "coverage": "nyc npm test"
+    "test": "npm run test:ts-node && npm run test:tsx",
+    "test:ts-node": "mocha --import=ts-node/esm --full-trace 'test/**/*.ts'",
+    "test:tsx": "mocha --import=tsx --full-trace 'test/**/*.ts'",
+    "coverage": "nyc npm run test:ts-node"
   },
   "files": [
     "dist",
@@ -27,12 +29,12 @@
   "license": "MIT",
   "keywords": [],
   "devDependencies": {
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^20.2.0",
-    "mocha": "^10.2.0",
-    "nyc": "^15.1.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "@types/mocha": "^10",
+    "@types/node": "^22",
+    "mocha": "^10",
+    "nyc": "^17",
+    "ts-node": "^10",
+    "tsx": "^4"
   },
   "dependencies": {
     "typescript": "^5"
